@@ -8,7 +8,7 @@ WORKDIR /var/www/html
 COPY . /var/www/html
 
 # Expose port 80
-EXPOSE 80
+EXPOSE 8080
 
 # Start the Apache server
 CMD ["apache2-foreground"]
