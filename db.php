@@ -1,9 +1,9 @@
 <?php
 // db.php
-$host = "aws-0-ap-southeast-1.pooler.supabase.com";
+$host = "";
 $dbname = "postgres";
-$user = "postgres.xbwkjgkihzrnoomxexwa";
-$password = "MYnraZWntBuJt6AM";
+$user = "";
+$password = "";
 
 $dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
 try {
