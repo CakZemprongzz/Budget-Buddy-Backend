@@ -4,6 +4,7 @@ $host = "";
 $dbname = "postgres";
 $user = "";
 $password = "";
+$port = ;
 
 $dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
 try {
