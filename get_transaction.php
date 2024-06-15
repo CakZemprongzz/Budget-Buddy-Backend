@@ -48,7 +48,7 @@ echo json_encode($formatted_data);
 // Function to get category name by ID (assuming you have a categories table)
 function getCategoryName($category_id) {
     global $pdo;
-    $sql = "SELECT name FROM Categories WHERE categories_id = ?";
+    $sql = "SELECT name FROM Categories WHERE category_id = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$category_id]);
     $category = $stmt->fetch(PDO::FETCH_ASSOC);
