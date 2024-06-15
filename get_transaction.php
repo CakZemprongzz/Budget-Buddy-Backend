@@ -29,15 +29,28 @@ $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $formatted_data = [
     'months' => date('F', strtotime($start_date)), // Full month name
     'year' => strval($year),
-    'datas' => []
+    'days' => []
 ];
 
+// Group transactions by day
+$grouped_transactions = [];
 foreach ($transactions as $transaction) {
-    $formatted_data['datas'][] = [
+    $day = date('d', strtotime($transaction['transaction_date']));
+    if (!isset($grouped_transactions[$day])) {
+        $grouped_transactions[$day] = [];
+    }
+    $grouped_transactions[$day][] = [
         'amount' => floatval($transaction['amount']),
         'note' => $transaction['description'],
-        'category' => getCategoryName($transaction['category_id']), // Assuming you have a function to get category name by ID
-        'date' => date('d', strtotime($transaction['transaction_date'])) // Day of the month for each transaction
+        'category' => getCategoryName($transaction['category_id']) // Assuming you have a function to get category name by ID
+    ];
+}
+
+// Format the grouped transactions
+foreach ($grouped_transactions as $day => $transactions) {
+    $formatted_data['days'][] = [
+        'date' => $day,
+        'datas' => $transactions
     ];
 }
 
