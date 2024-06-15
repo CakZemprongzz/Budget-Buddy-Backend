@@ -23,10 +23,34 @@ $sql = "SELECT category_id, description, transaction_date, amount FROM Transacti
             WHERE user_id = ? AND transaction_date >= ? AND transaction_date <= ?";
 $stmt = $pdo->prepare($sql);
 $stmt->execute([$user_id, $start_date, $end_date]);
-$monthly_totals = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// Prepare the data structure
+$formatted_data = [
+    'months' => date('F', strtotime($start_date)), // Full month name
+    'year' => strval($year),
+    'datas' => []
+];
 
+foreach ($transactions as $transaction) {
+    $formatted_data['datas'][] = [
+        'amount' => floatval($transaction['amount']),
+        'note' => $transaction['description'],
+        'category' => getCategoryName($transaction['category_id']), // Assuming you have a function to get category name by ID
+        'date' => date('d', strtotime($transaction['transaction_date']))
+    ];
+}
 
 // Encoding the result as JSON
-echo json_encode($monthly_totals);
+echo json_encode($formatted_data);
+
+// Function to get category name by ID (assuming you have a categories table)
+function getCategoryName($category_id) {
+    global $pdo;
+    $sql = "SELECT name FROM Categories WHERE id = ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$category_id]);
+    $category = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $category ? $category['name'] : 'Unknown';
+}
 ?>
