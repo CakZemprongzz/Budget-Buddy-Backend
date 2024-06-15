@@ -19,7 +19,7 @@ $user_id = intval($user_id);
 $start_date = "{$year}-{$month}-01";
 $end_date = date("Y-m-t", strtotime($start_date)); // Gets the last day of the given month
 
-$sql = "SELECT category_id, description , transaction_date, amount
+$sql = "SELECT category_id, description , transaction_date, amount FROM transactions
         WHERE user_id = ? AND transaction_date >= ? AND transaction_date <= ?
         GROUP BY category_id";
 $stmt = $pdo->prepare($sql);
