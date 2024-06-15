@@ -29,7 +29,6 @@ $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $formatted_data = [
     'months' => date('F', strtotime($start_date)), // Full month name
     'year' => strval($year),
-    'date' => strval(date('d', strtotime($start_date))), // Day of the month
     'datas' => []
 ];
 
@@ -38,7 +37,7 @@ foreach ($transactions as $transaction) {
         'amount' => floatval($transaction['amount']),
         'note' => $transaction['description'],
         'category' => getCategoryName($transaction['category_id']), // Assuming you have a function to get category name by ID
-        'transaction_date' => date('Y-m-d', strtotime($transaction['transaction_date']))
+        'date' => date('d', strtotime($transaction['transaction_date'])) // Day of the month for each transaction
     ];
 }
 
