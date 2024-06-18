@@ -16,13 +16,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt = $pdo->prepare($sql);
     // Execute with parameters in the correct order
     if ($stmt->execute([$category_id, $user_id, $amount, $transaction_date, $description, $in_out])) {
-        echo json_encode(['success' => true, 'message' => 'Transaction added successfully!']);
+        echo json_encode(['status' => 'success']);
     } else {
         http_response_code(500); // Internal Server Error
-        echo json_encode(['success' => false, 'message' => 'Failed to add transaction.']);
+        echo json_encode(['status' => 'failed']);
     }
 } else {
     http_response_code(405); // Method Not Allowed
-    echo json_encode(['success' => false, 'message' => 'Invalid request method.']);
+    echo json_encode(['status' => 'failed', 'message' => 'Invalid request method.']);
 }
 ?>
