@@ -24,6 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['username'] = $user['username'];
         $response['status'] = 'success';
         $response['message'] = 'Login successful!';
+        $response['user_id'] = $user['user_id'];
         $response['username'] = $user['username'];
     } else {
         // User not found or wrong password
