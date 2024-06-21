@@ -17,30 +17,36 @@ $end_date = "{$year}-12-31";
 // Query to fetch and sum transactions monthly
 $sql = "SELECT EXTRACT(MONTH FROM transaction_date) as month, category_id, in_out, SUM(amount) as total_amount 
         FROM Transactions
-        WHERE user_id = ? AND transaction_date BETWEEN ? AND ? 
+        WHERE user_id = ? AND transaction_date BETWEEN ? AND ?
         GROUP BY EXTRACT(MONTH FROM transaction_date), category_id, in_out";
 $stmt = $pdo->prepare($sql);
 $stmt->execute([$user_id, $start_date, $end_date]);
 $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$monthly_summary = [];
+$months = [
+    "January" => ['income' => 0, 'expense' => 0],
+    "February" => ['income' => 0, 'expense' => 0],
+    "March" => ['income' => 0, 'expense' => 0],
+    "April" => ['income' => 0, 'expense' => 0],
+    "May" => ['income' => 0, 'expense' => 0],
+    "June" => ['income' => 0, 'expense' => 0],
+    "July" => ['income' => 0, 'expense' => 0],
+    "August" => ['income' => 0, 'expense' => 0],
+    "September" => ['income' => 0, 'expense' => 0],
+    "October" => ['income' => 0, 'expense' => 0],
+    "November" => ['income' => 0, 'expense' => 0],
+    "December" => ['income' => 0, 'expense' => 0]
+];
 
 foreach ($transactions as $transaction) {
-    $month = date('F', mktime(0, 0, 0, $transaction['month'], 10)); // Convert month number to month name
-    if (!isset($monthly_summary[$month])) {
-        $monthly_summary[$month] = ['income' => 0, 'expense' => 0];
-    }
+    $monthIndex = intval($transaction['month']); // Get month index
+    $monthName = date('F', mktime(0, 0, 0, $monthIndex, 10)); // Convert month index to month name
     if ($transaction['in_out'] === 'in') {
-        $monthly_summary[$month]['income'] += floatval($transaction['total_amount']);
+        $months[$monthName]['income'] += floatval($transaction['total_amount']);
     } else {
-        $monthly_summary[$month]['expense'] += floatval($transaction['total_amount']);
+        $months[$monthName]['expense'] += floatval($transaction['total_amount']);
     }
 }
 
-$formatted_data = [
-    'year' => strval($year),
-    'summary' => $monthly_summary
-];
-
-echo json_encode($formatted_data);
+echo json_encode($months);
 ?>
