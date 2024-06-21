@@ -18,7 +18,8 @@ $end_date = date("Y-m-t", strtotime($start_date));
 
 // Include in_out in the SQL query
 $sql = "SELECT category_id, description, transaction_date, amount, in_out FROM Transactions
-            WHERE user_id = ? AND transaction_date >= ? AND transaction_date <= ?";
+        WHERE user_id = ? AND transaction_date >= ? AND transaction_date <= ?
+        ORDER BY transaction_date ASC"; 
 $stmt = $pdo->prepare($sql);
 $stmt->execute([$user_id, $start_date, $end_date]);
 $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
