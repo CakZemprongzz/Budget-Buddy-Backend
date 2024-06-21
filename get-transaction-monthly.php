@@ -15,10 +15,10 @@ $start_date = "{$year}-01-01";
 $end_date = "{$year}-12-31";
 
 // Query to fetch and sum transactions monthly
-$sql = "SELECT MONTH(transaction_date) as month, category_id, in_out, SUM(amount) as total_amount 
+$sql = "SELECT EXTRACT(MONTH FROM transaction_date) as month, category_id, in_out, SUM(amount) as total_amount 
         FROM Transactions
         WHERE user_id = ? AND transaction_date BETWEEN ? AND ? 
-        GROUP BY MONTH(transaction_date), category_id, in_out";
+        GROUP BY EXTRACT(MONTH FROM transaction_date), category_id, in_out";
 $stmt = $pdo->prepare($sql);
 $stmt->execute([$user_id, $start_date, $end_date]);
 $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
